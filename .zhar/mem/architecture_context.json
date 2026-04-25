@@ -1,0 +1,62 @@
+{
+  "01e1d": {
+    "id": "01e1d",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "API v1 uses user-bound env tokens",
+    "status": "active",
+    "tags": [
+      "api",
+      "auth"
+    ],
+    "source": null,
+    "content": "The planned public API uses a dedicated /api/v1 route tree. Authentication is bearer-token based, where any environment variable named USERTOKEN_{username} authenticates as that application user with case-insensitive username matching. API authorization should reuse the existing app permission model and admin behavior rather than introduce a separate policy for v1.",
+    "created_at": "2026-04-25T02:31:13Z",
+    "updated_at": "2026-04-25T02:31:13Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "0e4a0": {
+    "id": "0e4a0",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "Default admin API token env support",
+    "status": "active",
+    "tags": [
+      "api",
+      "auth"
+    ],
+    "source": null,
+    "content": "API v1 bearer authentication now also accepts an optional `API_ADMIN_TOKEN` environment variable.\n\nBehavior:\n- If `API_ADMIN_TOKEN` matches the bearer token, the request authenticates as the first admin user in the HabitTrove user store.\n- Existing `USERTOKEN_{username}` behavior remains unchanged.\n- If no admin user exists, `API_ADMIN_TOKEN` does not authenticate anyone.\n\nThis keeps the NextAuth `AUTH_SECRET` separate from API credentials while still providing a simple default admin token for integrations and operational use.",
+    "created_at": "2026-04-25T17:16:28Z",
+    "updated_at": "2026-04-25T17:16:28Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "1145b": {
+    "id": "1145b",
+    "group": "architecture_context",
+    "node_type": "tech_setup",
+    "summary": "Windows Husky pre-commit portability",
+    "status": "active",
+    "tags": [
+      "tooling",
+      "windows"
+    ],
+    "source": null,
+    "content": "On Windows, Husky hooks run under `sh`, which resolved Scoop's `npm` bash shim and failed because `/bin/bash` was unavailable.\n\nThe pre-commit hook now:\n- uses a Node-based changelog version check instead of `grep`\n- selects `npm.cmd` on MINGW/MSYS/CYGWIN shells\n- remains `npm` on non-Windows shells\n\nThis keeps the same quality gates (`typecheck`, `lint`, `test`) while making local commits portable on Windows.",
+    "created_at": "2026-04-25T17:42:24Z",
+    "updated_at": "2026-04-25T17:42:24Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  }
+}

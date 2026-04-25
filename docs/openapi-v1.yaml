@@ -1,0 +1,850 @@
+openapi: 3.1.0
+info:
+  title: HabitTrove API
+  version: v1
+  description: Versioned HTTP API for HabitTrove. Authenticate with either `USERTOKEN_{username}` bearer tokens or the optional `API_ADMIN_TOKEN` default admin bearer token.
+servers:
+  - url: /api/v1
+security:
+  - bearerAuth: []
+tags:
+  - name: Habits
+  - name: Coins
+  - name: Wishlist
+  - name: Settings
+  - name: Users
+  - name: Freshness
+paths:
+  /habits:
+    get:
+      tags: [Habits]
+      summary: List habits
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: Habit list
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          habits:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Habit'
+                          limit:
+                            type: integer
+    post:
+      tags: [Habits]
+      summary: Create habit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HabitUpsert'
+      responses:
+        '201':
+          description: Habit created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          habit:
+                            $ref: '#/components/schemas/Habit'
+  /habits/{id}:
+    patch:
+      tags: [Habits]
+      summary: Update habit
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HabitPatch'
+      responses:
+        '200':
+          $ref: '#/components/responses/HabitResponse'
+    delete:
+      tags: [Habits]
+      summary: Delete habit
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Habit deleted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          deleted:
+                            type: boolean
+  /habits/{id}/complete:
+    post:
+      tags: [Habits]
+      summary: Complete habit
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TargetUserAction'
+      responses:
+        '200':
+          description: Habit completed
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          habit:
+                            $ref: '#/components/schemas/Habit'
+                          coins:
+                            $ref: '#/components/schemas/CoinsData'
+                          undoDepth:
+                            type: integer
+  /habits/{id}/undo:
+    post:
+      tags: [Habits]
+      summary: Undo last habit completion
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TargetUserAction'
+      responses:
+        '200':
+          description: Habit completion undone
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          habit:
+                            $ref: '#/components/schemas/Habit'
+                          coins:
+                            $ref: '#/components/schemas/CoinsData'
+                          undoDepth:
+                            type: integer
+  /coins:
+    get:
+      tags: [Coins]
+      summary: Get coin summary
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: Coin summary
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          coins:
+                            $ref: '#/components/schemas/CoinsData'
+  /coins/transactions:
+    get:
+      tags: [Coins]
+      summary: List transactions
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: Transaction list
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          transactions:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/CoinTransaction'
+                          limit:
+                            type: integer
+  /coins/add:
+    post:
+      tags: [Coins]
+      summary: Add coins
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoinAdjustment'
+      responses:
+        '200':
+          description: Coins added
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          coins:
+                            $ref: '#/components/schemas/CoinsData'
+  /coins/remove:
+    post:
+      tags: [Coins]
+      summary: Remove coins
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoinAdjustment'
+      responses:
+        '200':
+          description: Coins removed
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          coins:
+                            $ref: '#/components/schemas/CoinsData'
+  /coins/transactions/{id}:
+    patch:
+      tags: [Coins]
+      summary: Update transaction note
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note:
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: Transaction updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          transaction:
+                            $ref: '#/components/schemas/CoinTransaction'
+  /wishlist:
+    get:
+      tags: [Wishlist]
+      summary: List wishlist items
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: Wishlist items
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          items:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/WishlistItem'
+                          limit:
+                            type: integer
+    post:
+      tags: [Wishlist]
+      summary: Create wishlist item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WishlistUpsert'
+      responses:
+        '201':
+          description: Wishlist item created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          item:
+                            $ref: '#/components/schemas/WishlistItem'
+  /wishlist/{id}:
+    patch:
+      tags: [Wishlist]
+      summary: Update wishlist item
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WishlistPatch'
+      responses:
+        '200':
+          description: Wishlist item updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          item:
+                            $ref: '#/components/schemas/WishlistItem'
+    delete:
+      tags: [Wishlist]
+      summary: Delete wishlist item
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Wishlist item deleted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          deleted:
+                            type: boolean
+  /wishlist/{id}/redeem:
+    post:
+      tags: [Wishlist]
+      summary: Redeem wishlist item
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TargetUserAction'
+      responses:
+        '200':
+          description: Wishlist item redeemed
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          item:
+                            $ref: '#/components/schemas/WishlistItem'
+                          coins:
+                            $ref: '#/components/schemas/CoinsData'
+  /wishlist/{id}/archive:
+    post:
+      tags: [Wishlist]
+      summary: Archive wishlist item
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Wishlist item archived
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          item:
+                            $ref: '#/components/schemas/WishlistItem'
+  /wishlist/{id}/unarchive:
+    post:
+      tags: [Wishlist]
+      summary: Unarchive wishlist item
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Wishlist item unarchived
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          item:
+                            $ref: '#/components/schemas/WishlistItem'
+  /settings:
+    get:
+      tags: [Settings]
+      summary: Get settings
+      responses:
+        '200':
+          description: Settings payload
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          settings:
+                            $ref: '#/components/schemas/Settings'
+    patch:
+      tags: [Settings]
+      summary: Patch settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Settings'
+      responses:
+        '200':
+          description: Settings updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          settings:
+                            $ref: '#/components/schemas/Settings'
+  /users:
+    get:
+      tags: [Users]
+      summary: List sanitized users
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Sanitized users
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          users:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/PublicUser'
+                          limit:
+                            type: integer
+  /freshness/check:
+    post:
+      tags: [Freshness]
+      summary: Compare client token with server state
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [clientToken]
+              properties:
+                clientToken:
+                  type: string
+                userId:
+                  type: string
+                includeUsers:
+                  type: boolean
+      responses:
+        '200':
+          description: Freshness result
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          isFresh:
+                            type: boolean
+                          serverToken:
+                            type: string
+                            nullable: true
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: API token
+      description: |
+        Bearer token authentication for API v1.
+
+        Supported token sources:
+        - `USERTOKEN_{username}` environment variables, which authenticate as the matching HabitTrove user
+        - optional `API_ADMIN_TOKEN`, which authenticates as the first admin user in the HabitTrove user store
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 100
+        minimum: 1
+        maximum: 100
+    UserId:
+      name: userId
+      in: query
+      required: false
+      schema:
+        type: string
+  responses:
+    HabitResponse:
+      description: Habit payload
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/SuccessEnvelope'
+              - type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      habit:
+                        $ref: '#/components/schemas/Habit'
+  schemas:
+    SuccessEnvelope:
+      type: object
+      required: [ok, data]
+      properties:
+        ok:
+          type: boolean
+          const: true
+        data:
+          type: object
+    ErrorEnvelope:
+      type: object
+      required: [ok, error]
+      properties:
+        ok:
+          type: boolean
+          const: false
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+    Habit:
+      type: object
+      required: [id, name, description, frequency, coinReward, completions]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        frequency:
+          type: string
+        coinReward:
+          type: number
+        targetCompletions:
+          type: number
+          nullable: true
+        completions:
+          type: array
+          items:
+            type: string
+        isTask:
+          type: boolean
+        archived:
+          type: boolean
+        pinned:
+          type: boolean
+        drawing:
+          type: string
+          nullable: true
+        userIds:
+          type: array
+          items:
+            type: string
+    HabitUpsert:
+      type: object
+      required: [name, frequency, coinReward]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        frequency:
+          type: string
+        coinReward:
+          type: number
+        targetCompletions:
+          type: number
+        isTask:
+          type: boolean
+        archived:
+          type: boolean
+        pinned:
+          type: boolean
+        drawing:
+          type: string
+        userId:
+          type: string
+        userIds:
+          type: array
+          items:
+            type: string
+    HabitPatch:
+      allOf:
+        - $ref: '#/components/schemas/HabitUpsert'
+    CoinTransaction:
+      type: object
+      required: [id, amount, type, description, timestamp]
+      properties:
+        id:
+          type: string
+        amount:
+          type: number
+        type:
+          type: string
+        description:
+          type: string
+        timestamp:
+          type: string
+        relatedItemId:
+          type: string
+        note:
+          type: string
+        userId:
+          type: string
+    CoinsData:
+      type: object
+      required: [balance, transactions]
+      properties:
+        balance:
+          type: number
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CoinTransaction'
+    CoinAdjustment:
+      type: object
+      required: [amount, description]
+      properties:
+        amount:
+          type: number
+        description:
+          type: string
+        note:
+          type: string
+        userId:
+          type: string
+    WishlistItem:
+      type: object
+      required: [id, name, description, coinCost]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        coinCost:
+          type: number
+        archived:
+          type: boolean
+        targetCompletions:
+          type: number
+          nullable: true
+        link:
+          type: string
+          nullable: true
+        drawing:
+          type: string
+          nullable: true
+        userIds:
+          type: array
+          items:
+            type: string
+    WishlistUpsert:
+      type: object
+      required: [name, coinCost]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        coinCost:
+          type: number
+        archived:
+          type: boolean
+        targetCompletions:
+          type: number
+        link:
+          type: string
+        drawing:
+          type: string
+        userId:
+          type: string
+        userIds:
+          type: array
+          items:
+            type: string
+    WishlistPatch:
+      allOf:
+        - $ref: '#/components/schemas/WishlistUpsert'
+    UISettings:
+      type: object
+      properties:
+        useNumberFormatting:
+          type: boolean
+        useGrouping:
+          type: boolean
+    SystemSettings:
+      type: object
+      properties:
+        timezone:
+          type: string
+        weekStartDay:
+          type: integer
+        autoBackupEnabled:
+          type: boolean
+        language:
+          type: string
+    ProfileSettings:
+      type: object
+      properties:
+        avatarPath:
+          type: string
+    Settings:
+      type: object
+      properties:
+        ui:
+          $ref: '#/components/schemas/UISettings'
+        system:
+          $ref: '#/components/schemas/SystemSettings'
+        profile:
+          $ref: '#/components/schemas/ProfileSettings'
+    PublicUser:
+      type: object
+      required: [id, username, hasPassword]
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        avatarPath:
+          type: string
+        isAdmin:
+          type: boolean
+        hasPassword:
+          type: boolean
+    TargetUserAction:
+      type: object
+      properties:
+        userId:
+          type: string

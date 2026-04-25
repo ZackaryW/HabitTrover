@@ -1,0 +1,42 @@
+{
+  "00417": {
+    "id": "00417",
+    "group": "project_dna",
+    "node_type": "core_requirement",
+    "summary": "Keep public API isolated under api/v1",
+    "status": "active",
+    "tags": [
+      "api",
+      "v1"
+    ],
+    "source": null,
+    "content": "The versioned external API should live under /api/v1 and minimize coupling to existing app routes and UI-facing server actions so the fork can evolve independently with low regression risk.",
+    "created_at": "2026-04-25T02:31:13Z",
+    "updated_at": "2026-04-25T02:31:13Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "priority": "high"
+    },
+    "custom": {}
+  },
+  "0359a": {
+    "id": "0359a",
+    "group": "project_dna",
+    "node_type": "core_goal",
+    "summary": "Deliver gamified multi-user habit tracking",
+    "status": "active",
+    "tags": [
+      "product"
+    ],
+    "source": null,
+    "content": null,
+    "created_at": "2026-04-25T02:31:34Z",
+    "updated_at": "2026-04-25T02:31:34Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  }
+}

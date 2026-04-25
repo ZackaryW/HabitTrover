@@ -8,3 +8,4 @@ services:
     image: dohsimpson/habittrove
     environment:
       - AUTH_SECRET=your-secret-key-here # Replace with your actual secret
+      - API_ADMIN_TOKEN=your-admin-api-token-here # Optional: bearer token for the first admin user

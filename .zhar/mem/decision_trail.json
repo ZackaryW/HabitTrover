@@ -1,0 +1,83 @@
+{
+  "02f08": {
+    "id": "02f08",
+    "group": "decision_trail",
+    "node_type": "adr",
+    "summary": "Adopt user-bound bearer tokens for API v1",
+    "status": "accepted",
+    "tags": [
+      "api",
+      "auth"
+    ],
+    "source": null,
+    "content": "API v1 tokens are no longer shared scoped strings from a single env variable. Instead, each token is discovered from environment variables named USERTOKEN_{username}. The token is bound to that user identity, usernames match case-insensitively, no extra token scope layer is added in v1, and clients send the token with an Authorization Bearer header.",
+    "created_at": "2026-04-25T02:31:13Z",
+    "updated_at": "2026-04-25T02:31:13Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "04ca3": {
+    "id": "04ca3",
+    "group": "decision_trail",
+    "node_type": "adr",
+    "summary": "Adopt action-style API v1 with envelope responses",
+    "status": "accepted",
+    "tags": [
+      "api",
+      "v1"
+    ],
+    "source": null,
+    "content": "API v1 keeps action-style endpoints for domain events such as coin adjustments, habit completion, and reward redemption. Admin-authenticated tokens may target other users where the route semantics allow it; non-admin token clients receive 403 for the read-only users surface. Freshness checks use POST. Successful and error responses should use a shared API envelope utility so the contract is consistent across /api/v1 handlers.",
+    "created_at": "2026-04-25T02:34:54Z",
+    "updated_at": "2026-04-25T02:34:54Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "05148": {
+    "id": "05148",
+    "group": "decision_trail",
+    "node_type": "research_finding",
+    "summary": "Pagination is only needed for history collections in API v1",
+    "status": "active",
+    "tags": [
+      "api"
+    ],
+    "source": null,
+    "content": "Current data shapes are small document-style resources except for append-heavy history collections. Pagination pressure exists primarily on coin transaction history and any future event/completion audit endpoints. Core resources such as settings, habits, wishlist items, and sanitized users do not need pagination in the initial API unless deployments are expected to reach unusually large cardinalities.",
+    "created_at": "2026-04-25T02:34:54Z",
+    "updated_at": "2026-04-25T02:34:54Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "outcome": "adopted",
+      "source_ref": "workspace-analysis"
+    },
+    "custom": {}
+  },
+  "06ab8": {
+    "id": "06ab8",
+    "group": "decision_trail",
+    "node_type": "adr",
+    "summary": "Use a uniform last-100 limit for v1 list endpoints",
+    "status": "accepted",
+    "tags": [
+      "api",
+      "pagination"
+    ],
+    "source": null,
+    "content": "API v1 list-style endpoints should support a simple limit parameter for the initial surface, defaulting to the most recent 100 items. This applies uniformly across list endpoints instead of introducing cursor pagination in v1. The intent is to keep clients simple while bounding response size; richer pagination can be added in a later version if deployment scale requires it.",
+    "created_at": "2026-04-25T02:36:13Z",
+    "updated_at": "2026-04-25T02:36:13Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  }
+}

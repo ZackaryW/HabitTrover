@@ -58,8 +58,12 @@ chown -R 1001:1001 data backups # Required for the nextjs user in container
 export AUTH_SECRET=$(openssl rand -base64 32)
 echo $AUTH_SECRET
 
+# Optional: generate a default admin API token for API v1
+export API_ADMIN_TOKEN=$(openssl rand -base64 32)
+echo $API_ADMIN_TOKEN
+
 # Using docker-compose (recommended)
-## Update the AUTH_SECRET environment variable in docker-compose.yaml
+## Update the AUTH_SECRET and optional API_ADMIN_TOKEN environment variables in docker-compose.yaml
 nano docker-compose.yaml
 ## Start the container
 docker compose up -d
@@ -70,8 +74,11 @@ docker run -d \
   -v ./data:/app/data \
   -v ./backups:/app/backups \ # Add this line to map the backups directory
   -e AUTH_SECRET=$AUTH_SECRET \
+  -e API_ADMIN_TOKEN=$API_ADMIN_TOKEN \
   dohsimpson/habittrove
 ```
+
+`API_ADMIN_TOKEN` is optional. When set, it can be used as a bearer token for API v1 and authenticates as the first admin user in the HabitTrove user store.
 
 Available image tags:
 

@@ -1,11 +1,16 @@
 #!/bin/sh
-# Check that package.json version exists in CHANGELOG.md
-VERSION=$(node -p "require('./package.json').version")
-if ! grep -q "## Version $VERSION" CHANGELOG.md; then
-  echo "❌ Error: Version $VERSION from package.json not found in CHANGELOG.md"
-  echo "Please add an entry for version $VERSION in CHANGELOG.md"
+
+if node -e "const fs=require('fs'); const version=require('./package.json').version; const changelog=fs.readFileSync('CHANGELOG.md', 'utf8'); if (!changelog.includes('## Version ' + version)) { console.error('❌ Error: Version ' + version + ' from package.json not found in CHANGELOG.md'); console.error('Please add an entry for version ' + version + ' in CHANGELOG.md'); process.exit(1); } console.log('✅ Version ' + version + ' found in CHANGELOG.md');"; then
+  :
+else
   exit 1
 fi
-echo "✅ Version $VERSION found in CHANGELOG.md"
 
-npm run typecheck && npm run lint && npm run test
+npm_exec="npm"
+case "$(uname -s)" in
+  MINGW*|MSYS*|CYGWIN*)
+    npm_exec="npm.cmd"
+    ;;
+esac
+
+"$npm_exec" run typecheck && "$npm_exec" run lint && "$npm_exec" run test

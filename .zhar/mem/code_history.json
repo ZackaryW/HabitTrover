@@ -1,0 +1,219 @@
+{
+  "07c67": {
+    "id": "07c67",
+    "group": "code_history",
+    "node_type": "file_change",
+    "summary": "Implement API v1 route tree",
+    "status": "active",
+    "tags": [
+      "api",
+      "v1"
+    ],
+    "source": null,
+    "content": null,
+    "created_at": "2026-04-25T02:47:54Z",
+    "updated_at": "2026-04-25T02:47:54Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "path": "app/api/v1",
+      "significance": "feature"
+    },
+    "custom": {}
+  },
+  "0877b": {
+    "id": "0877b",
+    "group": "code_history",
+    "node_type": "file_change",
+    "summary": "Add shared API helpers and bearer fallback auth",
+    "status": "active",
+    "tags": [
+      "api",
+      "auth"
+    ],
+    "source": null,
+    "content": null,
+    "created_at": "2026-04-25T02:47:54Z",
+    "updated_at": "2026-04-25T02:47:54Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "path": "utils/api",
+      "significance": "feature"
+    },
+    "custom": {}
+  },
+  "095f1": {
+    "id": "095f1",
+    "group": "code_history",
+    "node_type": "file_change",
+    "summary": "Add API v1 route tests",
+    "status": "active",
+    "tags": [
+      "api",
+      "tests"
+    ],
+    "source": null,
+    "content": null,
+    "created_at": "2026-04-25T02:52:20Z",
+    "updated_at": "2026-04-25T02:52:20Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "path": "app/api/v1",
+      "significance": "feature"
+    },
+    "custom": {}
+  },
+  "0abd2": {
+    "id": "0abd2",
+    "group": "code_history",
+    "node_type": "file_change",
+    "summary": "Publish OpenAPI v1 specification",
+    "status": "active",
+    "tags": [
+      "api",
+      "docs"
+    ],
+    "source": null,
+    "content": null,
+    "created_at": "2026-04-25T02:52:20Z",
+    "updated_at": "2026-04-25T02:52:20Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "path": "docs/openapi-v1.yaml",
+      "significance": "feature"
+    },
+    "custom": {}
+  },
+  "0b480": {
+    "id": "0b480",
+    "group": "code_history",
+    "node_type": "file_change",
+    "summary": "Declare lodash as a direct runtime dependency",
+    "status": "active",
+    "tags": [
+      "deps",
+      "tests"
+    ],
+    "source": null,
+    "content": null,
+    "created_at": "2026-04-25T03:02:00Z",
+    "updated_at": "2026-04-25T03:02:00Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "path": "package.json",
+      "significance": "patch"
+    },
+    "custom": {}
+  },
+  "0cfc9": {
+    "id": "0cfc9",
+    "group": "code_history",
+    "node_type": "file_change",
+    "summary": "Stabilize Bun route-test mocks for API v1",
+    "status": "active",
+    "tags": [
+      "api",
+      "tests"
+    ],
+    "source": null,
+    "content": null,
+    "created_at": "2026-04-25T03:02:00Z",
+    "updated_at": "2026-04-25T03:02:00Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "path": "app/api/v1",
+      "significance": "patch"
+    },
+    "custom": {}
+  },
+  "0daf2": {
+    "id": "0daf2",
+    "group": "code_history",
+    "node_type": "file_change",
+    "summary": "Make startup permission tests path-separator neutral",
+    "status": "active",
+    "tags": [
+      "tests",
+      "windows"
+    ],
+    "source": null,
+    "content": null,
+    "created_at": "2026-04-25T03:04:05Z",
+    "updated_at": "2026-04-25T03:04:05Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "path": "lib/startup-checks.test.ts",
+      "significance": "patch"
+    },
+    "custom": {}
+  },
+  "0f759": {
+    "id": "0f759",
+    "group": "code_history",
+    "node_type": "file_change",
+    "summary": "Add API_ADMIN_TOKEN bearer auth fallback",
+    "status": "active",
+    "tags": [
+      "api",
+      "auth"
+    ],
+    "source": "lib/server-helpers.ts",
+    "content": null,
+    "created_at": "2026-04-25T17:16:28Z",
+    "updated_at": "2026-04-25T17:16:28Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "significance": "feature"
+    },
+    "custom": {}
+  },
+  "10799": {
+    "id": "10799",
+    "group": "code_history",
+    "node_type": "file_change",
+    "summary": "Add reusable PowerShell API smoke test script",
+    "status": "active",
+    "tags": [
+      "api",
+      "testing"
+    ],
+    "source": "testscript/api-smoke.ps1",
+    "content": null,
+    "created_at": "2026-04-25T17:35:50Z",
+    "updated_at": "2026-04-25T17:35:50Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "significance": "feature"
+    },
+    "custom": {}
+  },
+  "12e34": {
+    "id": "12e34",
+    "group": "code_history",
+    "node_type": "file_change",
+    "summary": "Make Husky pre-commit Windows-safe",
+    "status": "active",
+    "tags": [
+      "tooling",
+      "windows"
+    ],
+    "source": ".husky/pre-commit",
+    "content": null,
+    "created_at": "2026-04-25T17:42:24Z",
+    "updated_at": "2026-04-25T17:42:24Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "significance": "patch"
+    },
+    "custom": {}
+  }
+}

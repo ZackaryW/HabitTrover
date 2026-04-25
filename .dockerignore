@@ -14,6 +14,7 @@ PLAN.md
 /backups/
 /data.bak/
 /coverage/
+/testscript/
 *.md
 !README.md
 !CHANGELOG.md
