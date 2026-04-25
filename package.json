@@ -1,6 +1,7 @@
 {
   "name": "habittrove",
   "version": "0.2.31",
+  "license": "AGPL-3.0-only",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",

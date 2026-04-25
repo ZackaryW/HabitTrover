@@ -181,7 +181,9 @@ We welcome feature requests and bug reports! Please [open an issue](https://gith
 
 ## License
 
-This project is licensed under the GNU Affero General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU Affero General Public License v3.0 - see [LICENSE](LICENSE) for the full license text.
+
+This repository is a derivative work of the upstream HabitTrove project. Repository-specific derivative-work and licensing notices live in [NOTICE.md](NOTICE.md). The GNU license text itself is kept verbatim.
 
 ## Support
 

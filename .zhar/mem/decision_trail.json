@@ -79,5 +79,24 @@
       "agent": "zhar-agent"
     },
     "custom": {}
+  },
+  "134d0": {
+    "id": "134d0",
+    "group": "decision_trail",
+    "node_type": "adr",
+    "summary": "Keep AGPL text verbatim and use NOTICE for project terms",
+    "status": "accepted",
+    "tags": [
+      "licensing"
+    ],
+    "source": null,
+    "content": "HabitTrove should keep the GNU AGPL license text verbatim and avoid publishing a custom \"derived\" GNU license document.\n\nRepository-specific licensing evolution should be expressed through:\n- package metadata (`license` field)\n- companion notice files such as `NOTICE.md`\n- separate additional-terms documents only when legally reviewed and intentionally adopted\n\nThis avoids modifying the GNU license text while still letting the project document its own policy and operational guidance.",
+    "created_at": "2026-04-25T17:44:28Z",
+    "updated_at": "2026-04-25T17:44:28Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
   }
 }

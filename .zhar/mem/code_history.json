@@ -215,5 +215,45 @@
       "significance": "patch"
     },
     "custom": {}
+  },
+  "14496": {
+    "id": "14496",
+    "group": "code_history",
+    "node_type": "file_change",
+    "summary": "Add explicit package license and NOTICE file",
+    "status": "active",
+    "tags": [
+      "licensing"
+    ],
+    "source": "NOTICE.md",
+    "content": null,
+    "created_at": "2026-04-25T17:44:28Z",
+    "updated_at": "2026-04-25T17:44:28Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "significance": "patch"
+    },
+    "custom": {}
+  },
+  "152e5": {
+    "id": "152e5",
+    "group": "code_history",
+    "node_type": "file_change",
+    "summary": "Rewrite NOTICE as derivative-work attribution",
+    "status": "active",
+    "tags": [
+      "licensing"
+    ],
+    "source": "NOTICE.md",
+    "content": null,
+    "created_at": "2026-04-25T17:46:31Z",
+    "updated_at": "2026-04-25T17:46:31Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "significance": "patch"
+    },
+    "custom": {}
   }
 }
