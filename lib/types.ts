@@ -34,9 +34,10 @@ export type SafeUser = SessionUser & {
 export type User = SafeUser & {
   password?: string // Optional: Allow users without passwords (e.g., initial setup)
   lastNotificationReadTimestamp?: string // UTC ISO date string
+  language?: string
 }
 
-export type PublicUser = Omit<User, 'password'> & {
+export type PublicUser = Omit<User, 'password' | 'language'> & {
   hasPassword: boolean
 }
 

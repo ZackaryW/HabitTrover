@@ -169,6 +169,12 @@ Redeem accepts an optional body:
 
 Patch body uses the existing settings shape and may be partial.
 
+Locale behavior:
+
+- `system.language` is persisted per user
+- other settings fields continue to use the shared settings payload
+- the global `settings.json` language remains the fallback for users who have not chosen a personal locale yet
+
 ## Users
 
 - `GET /api/v1/users?limit=100`

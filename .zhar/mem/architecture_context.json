@@ -58,5 +58,25 @@
       "agent": "zhar-agent"
     },
     "custom": {}
+  },
+  "168d8": {
+    "id": "168d8",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "Per-user locale preference over shared settings",
+    "status": "active",
+    "tags": [
+      "i18n",
+      "settings"
+    ],
+    "source": null,
+    "content": "Locale resolution now prefers a user-specific language preference stored on the authenticated user record.\n\nBehavior:\n- `settings.system.language` in `settings.json` remains the global fallback\n- `loadSettings()` overlays `user.language` when present\n- `saveSettings()` persists `system.language` back to the current user record instead of overwriting the shared settings file\n- public user payloads do not expose private language preferences\n\nThis keeps timezone and other settings shared as before while making i18n selection per-user.",
+    "created_at": "2026-04-25T17:54:46Z",
+    "updated_at": "2026-04-25T17:54:46Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
   }
 }

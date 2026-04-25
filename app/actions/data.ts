@@ -33,6 +33,7 @@ import { getCurrentUser } from '@/lib/server-helpers'
 import { prepareDataForHashing, generateCryptoHash } from '@/lib/utils';
 import { sanitizeUserData } from '@/lib/user-sanitizer'
 import { ALLOWED_AVATAR_EXTENSIONS, ALLOWED_AVATAR_MIME_TYPES } from '@/lib/avatar'
+import { resolveSettingsForUser, splitSettingsPersistence } from '@/lib/settings-preferences'
 
 
 
@@ -315,14 +316,64 @@ export async function loadSettings(): Promise<Settings> {
     const user = await getCurrentUser()
     if (!user) return defaultSettings
     const data = await loadData<Settings>('settings')
-    return { ...defaultSettings, ...data }
+    const baseSettings: Settings = {
+      ...defaultSettings,
+      ...data,
+      system: {
+        ...defaultSettings.system,
+        ...(data.system ?? {}),
+      },
+      profile: {
+        ...defaultSettings.profile,
+        ...(data.profile ?? {}),
+      },
+      ui: {
+        ...defaultSettings.ui,
+        ...(data.ui ?? {}),
+      },
+    }
+
+    return resolveSettingsForUser(baseSettings, user)
   } catch {
     return defaultSettings
   }
 }
 
+/**
+ * Persists shared settings while storing the active user's locale preference on the user record.
+ * Scope: settings updates from the settings page and API v1 settings endpoint.
+ */
 export async function saveSettings(settings: Settings): Promise<void> {
-  return saveData('settings', settings)
+  const user = await getCurrentUser()
+  const defaultSettings = getDefaultSettings()
+  const data = await loadData<Settings>('settings')
+  const baseSettings: Settings = {
+    ...defaultSettings,
+    ...data,
+    system: {
+      ...defaultSettings.system,
+      ...(data.system ?? {}),
+    },
+    profile: {
+      ...defaultSettings.profile,
+      ...(data.profile ?? {}),
+    },
+    ui: {
+      ...defaultSettings.ui,
+      ...(data.ui ?? {}),
+    },
+  }
+  const { settingsToPersist, userLanguage } = splitSettingsPersistence({
+    baseSettings,
+    nextSettings: settings,
+    user: user ?? undefined,
+  })
+
+  if (user && userLanguage && user.language !== userLanguage) {
+    await updateUser(user.id, { language: userLanguage })
+  }
+
+  return saveData('settings', settingsToPersist)
 }
 
 export async function removeCoins({

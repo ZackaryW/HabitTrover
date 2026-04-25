@@ -255,5 +255,26 @@
       "significance": "patch"
     },
     "custom": {}
+  },
+  "17962": {
+    "id": "17962",
+    "group": "code_history",
+    "node_type": "file_change",
+    "summary": "Store locale per user instead of globally",
+    "status": "active",
+    "tags": [
+      "i18n",
+      "settings"
+    ],
+    "source": "app/actions/data.ts",
+    "content": null,
+    "created_at": "2026-04-25T17:54:47Z",
+    "updated_at": "2026-04-25T17:54:47Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "significance": "feature"
+    },
+    "custom": {}
   }
 }

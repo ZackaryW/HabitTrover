@@ -85,4 +85,22 @@ describe('sanitizeUserData', () => {
     expect(output.users[0].isAdmin).toBe(false)
     expect(output.users[0].permissions?.[0].habit.write).toBe(true)
   })
+
+  test('does not expose private language preferences', () => {
+    const input: UserData = {
+      users: [
+        {
+          id: 'u1',
+          username: 'user',
+          password: 'hash',
+          language: 'fr',
+          isAdmin: false,
+        },
+      ],
+    }
+
+    const output = sanitizeUserData(input)
+
+    expect(output.users[0]).not.toHaveProperty('language')
+  })
 })
