@@ -15,6 +15,7 @@ This repository currently adds or documents these fork-specific surfaces:
 - API v1 under `/api/v1`
 - bearer-token API authentication via `USERTOKEN_{username}`
 - optional default admin API token via `API_ADMIN_TOKEN`
+- per-user locale preferences with global fallback in `data/settings.json`
 - Docker examples updated for API token testing
 - reusable PowerShell smoke tests in `testscript/`
 - derivative-work licensing notice in [NOTICE.md](NOTICE.md)
@@ -52,6 +53,16 @@ environment:
 ```
 
 `API_ADMIN_TOKEN` is optional. When set, it authenticates as the first admin user in the HabitTrove user store.
+
+## Per-User Locale
+
+This fork stores language preference per user instead of treating it as a single shared setting for every account.
+
+- `settings.system.language` remains the fallback default in [data/settings.json](data/settings.json)
+- once a signed-in user chooses a language, that preference is stored on the user record
+- locale resolution uses the user preference first and falls back to the shared setting only when the user has not chosen one yet
+
+This keeps the existing settings shape for clients while avoiding one user's language change affecting everyone else.
 
 ## Quick Test Scripts
 
