@@ -1,190 +1,77 @@
-# <img align="left" width="50" height="50" src="https://github.com/user-attachments/assets/99dcf223-3680-4b3a-8050-d9788f051682" /> HabitTrove
+# HabitTrover
 
-![cover](https://github.com/user-attachments/assets/b63e98b4-64ae-49c7-ae7e-21ef76c04a5a)
+HabitTrover is a derivative work of the upstream HabitTrove project.
 
-HabitTrove is a gamified habit tracking application that helps you build and maintain positive habits by rewarding you with coins, which you can use to exchange for rewards.
+For the base product overview, standard setup, core feature documentation, and upstream release context, see the upstream repository:
 
-Also, try [TaskTrove](https://github.com/dohsimpson/TaskTrove):
+- Upstream repo: https://github.com/dohsimpson/HabitTrove
 
-<a href="https://github.com/dohsimpson/TaskTrove"><img width="3400" height="920" alt="tasktrove-banner" src="https://github.com/user-attachments/assets/ec728fba-7645-4169-b383-f760967840b9" /></a>
+This README only documents what this repository adds or changes on top of upstream.
 
+## Local Additions
 
-## Try the Demo
+This repository currently adds or documents these fork-specific surfaces:
 
-Want to try HabitTrove before installing? Visit the public [demo instance](https://demo.habittrove.com) to experience all features without any setup required. (do not store personal info. Data on the demo instance is reset daily)
+- API v1 under `/api/v1`
+- bearer-token API authentication via `USERTOKEN_{username}`
+- optional default admin API token via `API_ADMIN_TOKEN`
+- Docker examples updated for API token testing
+- reusable PowerShell smoke tests in `testscript/`
+- derivative-work licensing notice in [NOTICE.md](NOTICE.md)
 
-## Features
+## API v1
 
-- 🎯 Create and track daily habits
-- 🏆 Earn coins for completing habits
-- 💰 Create a wishlist of rewards to redeem with earned coins
-- 📊 View your habit completion streaks and statistics
-- ✏️ Add freehand drawings to habits and wishlist items for visual reminders
-- 📅 Calendar heatmap to visualize your progress (WIP)
-- 🌍 Multi-language support (English, Español, Català, Deutsch, Français, Русский, 简体中文, 한국어, 日本語)
-- 🌙 Dark mode support
-- 📲 Progressive Web App (PWA) support
-- 💾 Automatic daily backups with rotation
+Repository-specific API documentation lives here:
 
-## Usage
+- Human-readable API guide: [docs/api-v1.md](docs/api-v1.md)
+- OpenAPI spec: [docs/openapi-v1.yaml](docs/openapi-v1.yaml)
 
-1. **Creating Habits**: Click the "Add Habit" button to create a new habit. Set a name, description, and coin reward.
+The API is exposed under `/api/v1` and uses bearer authentication.
 
-2. **Tracking Habits**: Mark habits as complete on your dashboard. Each completion earns you the specified coins.
+Supported token sources:
 
-3. **Wishlist**: Add rewards to your wishlist that you can redeem with earned coins.
+- `USERTOKEN_{username}` environment variables
+- optional `API_ADMIN_TOKEN` for a default admin bearer token
 
-4. **Statistics**: View your progress through the heatmap and streak counters.
+Example header:
 
-## Docker Deployment
-
-HabitTrove can be run using Docker in several ways, depending on your needs:
-
-### Using Pre-built Images
-
-The easiest way to run HabitTrove is using our pre-built Docker images from DockerHub:
-
-1. First, prepare the data directory with correct permissions:
-
-```bash
-mkdir -p data backups
-chown -R 1001:1001 data backups # Required for the nextjs user in container
+```http
+Authorization: Bearer your-token
 ```
 
-2. Then run using either method:
+## Docker Notes For This Fork
 
-```bash
-# Generate a secure authentication secret
-export AUTH_SECRET=$(openssl rand -base64 32)
-echo $AUTH_SECRET
+The local Docker examples in this repository include the optional admin API token used for API v1 testing.
 
-# Optional: generate a default admin API token for API v1
-export API_ADMIN_TOKEN=$(openssl rand -base64 32)
-echo $API_ADMIN_TOKEN
+Example environment values in [docker-compose.yaml](docker-compose.yaml):
 
-# Using docker-compose (recommended)
-## Update the AUTH_SECRET and optional API_ADMIN_TOKEN environment variables in docker-compose.yaml
-nano docker-compose.yaml
-## Start the container
-docker compose up -d
-
-# Or using docker run directly
-docker run -d \
-  -p 3000:3000 \
-  -v ./data:/app/data \
-  -v ./backups:/app/backups \ # Add this line to map the backups directory
-  -e AUTH_SECRET=$AUTH_SECRET \
-  -e API_ADMIN_TOKEN=$API_ADMIN_TOKEN \
-  dohsimpson/habittrove
+```yaml
+environment:
+  - AUTH_SECRET=your-secret-key-here
+  - API_ADMIN_TOKEN=your-admin-api-token-here
 ```
 
-`API_ADMIN_TOKEN` is optional. When set, it can be used as a bearer token for API v1 and authenticates as the first admin user in the HabitTrove user store.
+`API_ADMIN_TOKEN` is optional. When set, it authenticates as the first admin user in the HabitTrove user store.
 
-Available image tags:
+## Quick Test Scripts
 
-- `latest`: Stable release version, recommended for most users
-- `vX.Y.Z` (e.g., `v0.1.4`): Specific version for reproducible deployments and rollbacks
-- `dev`: Latest development build from the main branch, may contain unstable features
+This repository includes quick local smoke tests under [testscript](testscript).
 
-Choose your tag based on needs:
+Current script:
 
-- Use `latest` for general production use
-- Use version tags (e.g., `v0.2.9`) for reproducible deployments
-- Use `dev` for testing new features
+- [testscript/api-smoke.ps1](testscript/api-smoke.ps1)
 
-**Note on Volumes:** The application stores user data in `/app/data` and backups in `/app/backups` inside the container. The examples above map `./data` and `./backups` from your host machine to these container directories. Ensure these host directories exist and have the correct permissions (`chown -R 1001:1001 data backups`).
+Run it against a local instance with:
 
-### Building Locally
-
-If you want to build the image locally (useful for development):
-
-```bash
-# Build the Docker image
-npm run docker-build
-
-# Run the container
-npm run docker-run
+```powershell
+.\testscript\api-smoke.ps1
 ```
 
-The application data will be persisted in the `data` directory in both cases.
+## Licensing
 
-## Building the Project
+This repository is a derivative work of the upstream HabitTrove project.
 
-To contribute to HabitTrove, you'll need to set up a development environment. Here's how to get started:
+- Full AGPL text: [LICENSE](LICENSE)
+- Derivative-work notice: [NOTICE.md](NOTICE.md)
 
-### Prerequisites
-
-- Node.js 20 or later
-- npm package manager
-- Git (for version control)
-- bun (for running tests)
-
-### Setting Up the Development Environment
-
-1. Clone the repository and navigate to the project directory:
-
-```bash
-git clone https://github.com/dohsimpson/habittrove.git
-cd habittrove
-```
-
-2. Install project dependencies:
-
-```bash
-npm install --force
-```
-
-3. Set up the development environment:
-
-```bash
-npm run setup:dev
-```
-
-4. Start the development server:
-
-```bash
-npm run dev
-```
-
-5. Open [http://localhost:3000](http://localhost:3000) in your browser to access the development version.
-
-### Running Tests
-
-Before contributing, make sure to run the test suite:
-
-```bash
-npm test
-```
-
-### Building for Production
-
-To build the project for production:
-
-```bash
-npm run build
-```
-
-This will create an optimized production build in the `.next` directory.
-
-### Code Quality Tools
-
-The project uses several tools to maintain code quality:
-
-- ESLint for linting: `npm run lint`
-- TypeScript type checking: `npm run typecheck`
-
-Run these commands regularly during development to catch issues early.
-
-## Contributing
-
-We welcome feature requests and bug reports! Please [open an issue](https://github.com/dohsimpson/habittrove/issues/new). We do not accept pull request at the moment.
-
-## License
-
-This project is licensed under the GNU Affero General Public License v3.0 - see [LICENSE](LICENSE) for the full license text.
-
-This repository is a derivative work of the upstream HabitTrove project. Repository-specific derivative-work and licensing notices live in [NOTICE.md](NOTICE.md). The GNU license text itself is kept verbatim.
-
-## Support
-
-If you encounter any issues or have questions, please file an issue on the GitHub repository.
+The GNU license text is kept verbatim. Repository-specific attribution and derivative-work notes are documented separately.
